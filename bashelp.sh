@@ -65,6 +65,18 @@ _bash_help () {
 	return
     fi
 
+    # Check special cases
+    if [ "$CMD" = "git" ]
+    then
+        TOKEN_NO_CMD=${TOKEN#* }
+        SUBCMD=${TOKEN_NO_CMD%% *}
+        # If there's a manual for this git subcommand, use that as CMD
+        if man -w "$CMD-$SUBCMD" &>/dev/null
+        then
+            CMD="$CMD-$SUBCMD"
+        fi
+    fi
+
 # construct command
     HELP="$MANPGM \"$PREFIX$CMD\" ; exit "
 
