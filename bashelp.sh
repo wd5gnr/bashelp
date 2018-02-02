@@ -23,6 +23,7 @@ _bash_help () {
     # MANOPT is usually empty unless you need to pass -H to man or some other option
     MANOPT=
     # If using a GUI MANPGM (yelp, gman, etc.) Set TERMINAL to blank (TERMINAL=)
+    # Set TERMINAL=man to show man pages in the current terminal with MANPGM
     # Set TERMINAL=screen to show man pages in the current terminal with GNU Screen
     # GNOME Terminal is supported (TERMINAL=gnome-terminal)
     # Other terminals must accept the same options as xterm
@@ -49,8 +50,8 @@ _bash_help () {
 
 # Don't try to help people in a console/TTY if TERMINAL isn't known to work
     case $TERMINAL in
-        screen)
-            ;;
+        man) ;;
+        screen) ;;
         *)
             if [ -z "$DISPLAY" ]
             then
@@ -79,6 +80,9 @@ _bash_help () {
                 ;;
             gnome-terminal)
                 "$TERMINAL" --geometry="$SIZE" -- $MANPGM "$PREFIX$CMD"
+                ;;
+            man)
+                $MANPGM "$PREFIX$CMD"
                 ;;
             screen)
                 "$TERMINAL" $MANPGM "$PREFIX$CMD"
