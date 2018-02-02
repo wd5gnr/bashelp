@@ -68,12 +68,12 @@ _bash_help () {
     # Check special cases
     if [ "$CMD" = "git" ]
     then
-        TOKEN_NO_CMD=${TOKEN#* }
-        SUBCMD=${TOKEN_NO_CMD%% *}
+        local token_no_cmd=${TOKEN#* }
+        local subcmd=${token_no_cmd%% *}
         # If there's a manual for this git subcommand, use that as CMD
-        if man -w "$CMD-$SUBCMD" &>/dev/null
+        if man -w "$CMD-$subcmd" &>/dev/null
         then
-            CMD="$CMD-$SUBCMD"
+            CMD="$CMD-$subcmd"
         fi
     fi
 
