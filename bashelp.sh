@@ -24,6 +24,7 @@ _bash_help () {
     MANOPT=
     # If using a GUI MANPGM (yelp, gman, etc.) Set TERMINAL to blank (TERMINAL=)
     # Set TERMINAL=screen to show man pages in the current terminal with GNU Screen
+    # GNOME Terminal is supported (TERMINAL=gnome-terminal)
     # Other terminals must accept the same options as xterm
     TERMINAL=xterm
 
