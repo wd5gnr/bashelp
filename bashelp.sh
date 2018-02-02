@@ -76,6 +76,9 @@ _bash_help () {
             "")
                 ( "$MANPGM" $MANOPT "$PREFIX$CMD" &) &>/dev/null   # must be a GUI man?
                 ;;
+            gnome-terminal)
+                ("$TERMINAL" --geometry="$SIZE" -- $MANPGM "$PREFIX$CMD")
+                ;;
             screen)
                 "$TERMINAL" $MANPGM "$PREFIX$CMD"
                 ;;
