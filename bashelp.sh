@@ -1,10 +1,7 @@
 # source this and bind it to get context help on the shell
 # here's a bind line to get you started
-if [ ! -z "$DISPLAY" ]
-then
 # Bind to ^Y although obviously you could pick something else
-    bind -x '"\C-Y":_bash_help'
-fi
+bind -x '"\C-Y":_bash_help'
 
 
 _bash_help () {
@@ -25,8 +22,10 @@ _bash_help () {
     PREFIX=
     # MANOPT is usually empty unless you need to pass -H to man or some other option
     MANOPT=
-    # if using a GUI MANPGM (yelp, gman, etc.) Set TERMINAL to blank (TERMINAL=)
-    TERMINAL=xterm    # name of terminal (must accept same options as xterm)
+    # If using a GUI MANPGM (yelp, gman, etc.) Set TERMINAL to blank (TERMINAL=)
+    # Set TERMINAL=screen to show man pages in the current terminal with GNU Screen
+    # Other terminals must accept the same options as xterm
+    TERMINAL=xterm
 
     USEBROWSER=0    # set 0 to use terminal or GUI, other to use web browser
 
@@ -47,11 +46,17 @@ _bash_help () {
 	return
     fi
 
-# Don't try to help people in a console/TTY
-    if [ -z "$DISPLAY" ]
-    then
-	return
-    fi
+# Don't try to help people in a console/TTY if TERMINAL isn't known to work
+    case $TERMINAL in
+        screen)
+            ;;
+        *)
+            if [ -z "$DISPLAY" ]
+            then
+                return
+            fi
+            ;;
+    esac
 
 # Get command name
     TOKEN="${READLINE_LINE:0:${READLINE_POINT}}"
@@ -65,18 +70,20 @@ _bash_help () {
 	return
     fi
 
-# construct command
-    HELP="$MANPGM \"$PREFIX$CMD\" ; exit "
-
     if [ "$USEBROWSER" == 0 ]
-       then
-	   if [ -z "$TERMINAL" ]
-	   then
-	       ( "$MANPGM" $MANOPT "$PREFIX$CMD" &) &>/dev/null   # must be a GUI man?
-	   else
-#execute without job control noise
-	       ("$TERMINAL" -geometry "$SIZE" -e "$HELP" &)
-	   fi 
+    then
+        case $TERMINAL in
+            "")
+                ( "$MANPGM" $MANOPT "$PREFIX$CMD" &) &>/dev/null   # must be a GUI man?
+                ;;
+            screen)
+                "$TERMINAL" $MANPGM "$PREFIX$CMD"
+                ;;
+            *)
+                # execute without job control noise
+                ("$TERMINAL" -geometry "$SIZE" -e "$MANPGM \"$PREFIX$CMD\"; exit" &)
+                ;;
+        esac
     else
 	if [ -z "$SITE" ]
 	then
