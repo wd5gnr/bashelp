@@ -24,7 +24,8 @@ _bash_help () {
     MANOPT=
     # If using a GUI MANPGM (yelp, gman, etc.) Set TERMINAL to blank (TERMINAL=)
     # Set TERMINAL=man to show man pages in the current terminal with MANPGM
-    # Set TERMINAL=screen to show man pages in the current terminal with GNU Screen
+    # Set TERMINAL=screen to show man pages in a new window of GNU Screen
+    # Set TERMINAL=tmux to show man pages in a new window of tmux
     # GNOME Terminal is supported (TERMINAL=gnome-terminal)
     # Other terminals must accept the same options as xterm
     TERMINAL=xterm
@@ -52,6 +53,7 @@ _bash_help () {
     case $TERMINAL in
         man) ;;
         screen) ;;
+        tmux) ;;
         *)
             if [ -z "$DISPLAY" ]
             then
@@ -86,6 +88,9 @@ _bash_help () {
                 ;;
             screen)
                 "$TERMINAL" $MANPGM "$PREFIX$CMD"
+                ;;
+            tmux)
+                "$TERMINAL" new-window $MANPGM "$PREFIX$CMD"
                 ;;
             *)
                 # execute without job control noise
