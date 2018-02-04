@@ -74,6 +74,21 @@ _bash_help () {
 	return
     fi
 
+    # Check special cases
+    if [ "$CMD" = "btrfs" -o "$CMD" = "flatpak" -o "$CMD" = "git" -o "$CMD" = "openssl" -o "$CMD" = "ostree" ]
+    then
+        local token_no_cmd=${TOKEN#* }
+        local subcmd=${token_no_cmd%% *}
+        # If there's a manual for this subcommand, use that as CMD
+        if man -w "$CMD-$subcmd" &>/dev/null
+        then
+            CMD="$CMD-$subcmd"
+        fi
+    fi
+
+# construct command
+    HELP="$MANPGM \"$PREFIX$CMD\" ; exit "
+
     if [ "$USEBROWSER" == 0 ]
     then
         case $TERMINAL in
