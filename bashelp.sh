@@ -63,63 +63,63 @@ _bash_help () {
     esac
 
 # Get command name
-    TOKEN="${READLINE_LINE:0:${READLINE_POINT}}"
+    local token="${READLINE_LINE:0:${READLINE_POINT}}"
 # find first part of command line
-    CMD=${TOKEN%% *}
+    local cmd=${token%% *}
     # If we don't know about this program, skip it
     # don't redirect stderr since that is helpful
     # we assume the system man knows about everything the other man programs might know
-    if ! man -w "$CMD" >/dev/null
+    if ! man -w "$cmd" >/dev/null
     then
 	return
     fi
 
     # Check special cases
-    if [ "$CMD" = "btrfs" -o "$CMD" = "flatpak" -o "$CMD" = "git" -o "$CMD" = "openssl" -o "$CMD" = "ostree" ]
+    if [ "$cmd" = "btrfs" -o "$cmd" = "flatpak" -o "$cmd" = "git" -o "$cmd" = "openssl" -o "$cmd" = "ostree" ]
     then
-        local token_no_cmd=${TOKEN#* }
+        local token_no_cmd=${token#* }
         local subcmd=${token_no_cmd%% *}
-        # If there's a manual for this subcommand, use that as CMD
-        if man -w "$CMD-$subcmd" &>/dev/null
+        # If there's a manual for this subcommand, use that as cmd
+        if man -w "$cmd-$subcmd" &>/dev/null
         then
-            CMD="$CMD-$subcmd"
+            cmd="$cmd-$subcmd"
         fi
     fi
 
 # construct command
-    HELP="$MANPGM \"$PREFIX$CMD\" ; exit "
+    cmd_pref="$PREFIX$cmd"
 
     if [ "$USEBROWSER" == 0 ]
     then
         case $TERMINAL in
             "")
-                ( "$MANPGM" $MANOPT "$PREFIX$CMD" &) &>/dev/null   # must be a GUI man?
+                ( "$MANPGM" $MANOPT "$cmd_pref" &) &>/dev/null   # must be a GUI man?
                 ;;
             gnome-terminal)
-                "$TERMINAL" --geometry="$SIZE" -- $MANPGM "$PREFIX$CMD"
+                "$TERMINAL" --geometry="$SIZE" -- $MANPGM "$cmd_pref"
                 ;;
             man)
-                $MANPGM "$PREFIX$CMD"
+                $MANPGM "$cmd_pref"
                 ;;
             screen)
-                "$TERMINAL" $MANPGM "$PREFIX$CMD"
+                "$TERMINAL" $MANPGM "$cmd_pref"
                 ;;
             tmux)
-                "$TERMINAL" new-window $MANPGM "$PREFIX$CMD"
+                "$TERMINAL" new-window $MANPGM "$cmd_pref"
                 ;;
             *)
                 # execute without job control noise
-                ("$TERMINAL" -geometry "$SIZE" -e "$MANPGM \"$PREFIX$CMD\"; exit" &)
+                ("$TERMINAL" -geometry "$SIZE" -e "$MANPGM \"$cmd_pref\"; exit" &)
                 ;;
         esac
     else
 	if [ -z "$SITE" ]
 	then
 	    export BROWSER
-	    ("$MANPGM" $MANOPT "$PREFIX$CMD" &) &>/dev/null  # catch messages from browser & job control
+	    ("$MANPGM" $MANOPT "$cmd_pref" &) &>/dev/null  # catch messages from browser & job control
 	else
 # if you are more a web kind of guy/gal try this
-	    ( xdg-open "$SITE$CMD" &)
+	    ( xdg-open "$SITE$cmd" &)
 	fi
     fi
     }
