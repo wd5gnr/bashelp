@@ -41,10 +41,9 @@ _bash_help () {
 
     # Get command up to the cursor
     local token="${READLINE_LINE:0:${READLINE_POINT}}"
-    # Remove everything before the last pipe
-    token=${token##*|}
-    # Strip leading whitespace
-    token="$(echo -e "${token}" | sed -e 's/^[[:space:]]*//')"
+    # Strip everything before and including the last pipe, ampersand, or
+    # semicolon, and all the whitespace immediately thereafter
+    token="$(echo -e "${token}" | sed -e 's/^\(.*[|&;]\)*[[:space:]]*//')"
     # Get the first word of token
     local cmd=${token%% *}
     # If we don't know about this program, skip it
