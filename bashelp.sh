@@ -3,47 +3,6 @@
 # Bind to ^Y although obviously you could pick something else
 bind -x '"\C-Y":_bash_help'
 
-# Options
-#
-# You can run man in an xterm (or equivalent) by setting:
-#
-#     BASHELP_MANPGM=man
-#     BASHELP_TERMINAL=xterm
-#     BASHELP_USEBROWSER=0
-#
-# Note that these are the default settings if the BASHELP environment variables
-# are unset.
-#
-# Supported values for BASHELP_TERMINAL are:
-#
-# * man (runs man in the current terminal)
-# * screen (shows man pages in a new window of GNU Screen)
-# * tmux (shows man pages in a new window of tmux)
-# * gnome-terminal
-# * Any terminal that takes the same command-line options as xterm
-#
-# Graphical terminals can be passed options using BASHELP_TERMOPT.
-#
-# Or, you can run a GUI man reader like yelp by setting:
-#
-#     BASHELP_MANPGM="yelp"
-#     BASHELP_PREFIX="man:"
-#     BASHELP_TERMINAL=
-#     BASHELP_USEBROWSER=0
-#
-# Or, you can open a web site using the default web browser by setting:
-#
-#     BASHELP_USEBROWSER=1
-#     BASHELP_SITE="http://man.he.net/?section=all&topic=" #(or equivalent)
-#
-# Or, you can open a local man page in a browser by setting:
-#
-#     BASHELP_MANPGM=man
-#     BASHELP_USEBROWSER=1
-#     BASHELP_SITE=
-#     BASHELP_MANOPT="-H "
-#     BROWSER=google-chrome
-
 _bash_help () {
     # Program used to show man pages, probably man or some graphical man reader
     local manpgm=${BASHELP_MANPGM-man}
