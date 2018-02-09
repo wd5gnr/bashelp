@@ -64,7 +64,7 @@ _bash_help () {
     fi
 
 # construct command
-    cmd_pref="$prefix$cmd"
+    local cmd_pref="$prefix$cmd"
 
     if [ "$usebrowser" == 0 ]
     then
