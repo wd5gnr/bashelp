@@ -5,25 +5,53 @@ Offer help at the bash command prompt. Al Williams
 
 Usage
 ---
-. bashelp.sh
+
+    . bashelp.sh
 
 Near the start of the file is a line:
+
     bind -x '"\C-Y":_bash_help'
 
-You can change the key from ^Y to something else by changing this line and sourcing the file again.
+You can change the key from <kbd>Ctrl</kbd> + <kbd>Y</kbd> to something else by
+changing this line and sourcing the file again.
 
-You may want to edit some of the other configuration parameters near the top:
-* MANPGM - The name of your man program. Usually man unless you want a GUI (yelp, khelpcenter, gman, xman)
-* PREFIX - If you need a prefix on the man topic (e.g., man:ls for ls, you set this to man:)
-* MANOPT - If you need to pass an option to your man program (e.g., -H)
-* TERMINAL - Set if using a CLI-based man (usually set to xterm)
-* USEBROWSER - Set to 0 to run MANPGM in its own window
-* SITE - If USEBROWSER=1 use a web browser to get the man page on the Internet (set up for http://man.he.net)
-* SIZE - Size of terminal window (not used when TERMINAL is blank)
+Options
+-------
 
-Common setups:
-* Normal man in a new shell: MANPGM=man TERMINAL=xterm USEBROWSER=0 SIZE=132x48+0+0
-* KDE Help: MANPGM=khelpcenter PREFIX=man: USEBROWSER=0
-* Web: USEBROWSER=1 SITE="http://man.he.net/?section=all&topic="
-* Local Browser: MANPGM=man MANOPT=-H USEBROWSER=1 BROWSER=google-chrome
+The way that bashelp shows man pages can be configured through environment
+variables, without modifying the script itself.  The default settings, shown
+below, tell bashelp to run man in an xterm:
 
+    BASHELP_MANPGM=man
+    BASHELP_TERMINAL=xterm
+    BASHELP_USEBROWSER=0
+
+Supported values for `BASHELP_TERMINAL` are:
+
+* `man` (runs man in the current terminal)
+* `screen` (shows man pages in a new window of GNU Screen)
+* `tmux` (shows man pages in a new window of tmux)
+* `gnome-terminal`
+* Any terminal that takes the same command-line options as xterm
+
+Graphical terminals can be passed additional options using `BASHELP_TERMOPT`.
+
+Or, you can run a GUI man reader like yelp by setting:
+
+    BASHELP_MANPGM="yelp"
+    BASHELP_PREFIX="man:"
+    BASHELP_TERMINAL=
+    BASHELP_USEBROWSER=0
+
+Or, you can open a web site using the default web browser by setting:
+
+    BASHELP_USEBROWSER=1
+    BASHELP_SITE="http://man.he.net/?section=all&topic=" #(or equivalent)
+
+Or, you can open a local man page in a browser by setting:
+
+    BASHELP_MANPGM=man
+    BASHELP_USEBROWSER=1
+    BASHELP_SITE=
+    BASHELP_MANOPT="-H "
+    BROWSER=google-chrome
