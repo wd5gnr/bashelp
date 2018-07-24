@@ -39,9 +39,12 @@ _bash_help () {
             ;;
     esac
 
-# Get command name
+    # Get command up to the cursor
     local token="${READLINE_LINE:0:${READLINE_POINT}}"
-# find first part of command line
+    # Strip everything before and including the last pipe, ampersand, or
+    # semicolon, and all the whitespace immediately thereafter
+    token="$(echo -e "${token}" | sed -e 's/^\(.*[|&;]\)*[[:space:]]*//')"
+    # Get the first word of token
     local cmd=${token%% *}
     # If we don't know about this program, skip it
     # don't redirect stderr since that is helpful
